@@ -4,7 +4,6 @@ from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
-# This configures the title and description of your documentation homepage
 schema_view = get_schema_view(
    openapi.Info(
       title="Hospital Booking API",
@@ -17,8 +16,12 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # ... keep your existing API paths here, exactly as you had them ...
     
-    # This single line takes over the blank '404' root URL and turns it into the Swagger dashboard!
+    # --- YOUR ORIGINAL API ROUTES ---
+    # (Change 'hospitals.urls' and 'appointments.urls' if your apps are named differently!)
+    path('api/', include('hospitals.urls')),
+    path('api/', include('appointments.urls')),
+    
+    # --- THE NEW SWAGGER HOMEPAGE ---
     path('', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
 ]
