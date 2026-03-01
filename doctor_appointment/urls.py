@@ -1,26 +1,24 @@
-"""
-URL configuration for doctor_appointment project.
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/6.0/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
-# doctor_appointment/urls.py
 from django.contrib import admin
 from django.urls import path, include
+from rest_framework import permissions
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
+
+# This configures the title and description of your documentation homepage
+schema_view = get_schema_view(
+   openapi.Info(
+      title="Hospital Booking API",
+      default_version='v1',
+      description="A highly concurrent REST API for managing hospital appointments, doctors, and patient records.",
+   ),
+   public=True,
+   permission_classes=(permissions.AllowAny,),
+)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # This line connects all your hospital routes under the /api/ prefix!
-    path('api/', include('hospitals.urls')),
-    path('api/', include('appointments.urls')), # <--- Add this line! 
+    # ... keep your existing API paths here, exactly as you had them ...
+    
+    # This single line takes over the blank '404' root URL and turns it into the Swagger dashboard!
+    path('', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
 ]
